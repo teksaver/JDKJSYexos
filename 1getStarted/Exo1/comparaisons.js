@@ -18,21 +18,11 @@ class Horaire{
     }
 
     toString(){
-        return `${this.heures}h${this.minutes}`;
+        return `${String(this.heures).padStart(2,"0")}h${String(this.minutes).padStart(2,"0")}`;
     }
 
     estEgalOuApres(autreHoraire){
-        if (this.heures > autreHoraire.heures){
-            return 1
-        } else if (this.heures < autreHoraire.heures){
-            return 0
-        } else if (this.minutes > autreHoraire.minutes){
-            return 1;
-        } else if (this.minutes < autreHoraire.minutes){
-            return 0;
-        } else{
-            return 1;
-        }
+        return (this.toString() >= autreHoraire.toString());
     }
 }
 
@@ -43,21 +33,22 @@ function scheduleMeeting(startTime,durationMinutes) {
     let horaireMax = new Horaire(dayEnd);
     let meeting = new Horaire(startTime);
 
+    let chaineInfoDebut = `le meeting débutant à ${meeting}`; 
+
     // si le meeting débute trop tôt, on renvoie faux
     if (!meeting.estEgalOuApres(horaireMin)){
-        console.log(`le meeting débutant à ${meeting} commence trop tôt`);
+        console.log(`${chaineInfoDebut} commence trop tôt`);
         return false;
     }
 
     // si la fin du meeting est torp tard, on renvoie faux
     meeting.ajouterDuree(durationMinutes);
-    console.log(`fin du meeting : ${meeting}`);
 
     if (horaireMax.estEgalOuApres(meeting)){
-        console.log(`le meeting finissant à ${meeting} termine dans la période`);
+        console.log(`${chaineInfoDebut} et finissant à ${meeting} termine dans la période`);
         return true;
     }
-    console.log(`le meeting finissant à ${meeting} termine trop tard`);
+    console.log(`${chaineInfoDebut} et finissant à ${meeting} termine trop tard`);
     return false;
     
 }
